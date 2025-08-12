@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  ai-app-b:
+    build:
+      context: ./teamB
+        image: ${DOCKERHUB_USERNAME}/ai-app-b:latest
+    networks:
+      - shared-net
+    env_file:
+      - .env.teamB
+    environment:
+      - MONGO_URI=mongodb://${TEAM_B_USER}:${TEAM_B_PASS}@mongo:27017/teamB_db
+      - VECTOR_DB_URI=http://vector-db:19530
+      - PROMETHEUS_PREFIX=teamB_
+    depends_on:
+      - mongo
+      - vector-db
+
+networks:
+  shared-net:
+    external: true

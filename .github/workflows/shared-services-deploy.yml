@@ -1,0 +1,32 @@
+name: Deploy Shared Services
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'shared-services.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          script: |
+            cd /home/overall/vsp/multi/multi-team-dev-deployment
+            
+            # Pull the latest images for shared services
+            docker compose -f shared-services.yml pull
+            
+            # Restart the shared services to use the new images
+            docker compose -f shared-services.yml up -d --no-build
+            
+            echo "Shared services deployment successful!"

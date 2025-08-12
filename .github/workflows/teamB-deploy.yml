@@ -1,0 +1,53 @@
+name: Build and Deploy Team B
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'teamB/**'
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Team B image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./teamB
+          file: ./teamB/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/ai-app-b:latest
+
+deploy:
+    needs: build_and_push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_PRIVATE_KEY }}
+          script: |
+            cd /home/overall/vsp/multi/multi-team-dev-deployment
+            
+            # Pull the latest image from Docker Hub
+            docker compose -f teamB.yml pull
+            
+            # Restart the service to use the new image
+            docker compose -f teamB.yml up -d --no-build
+            
+            echo "Team B deployment successful!"
