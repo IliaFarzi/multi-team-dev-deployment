@@ -1,0 +1,22 @@
+version: '3.9'
+
+networks:
+  shared-net:
+    external: true
+
+services:
+  product-app:
+    build:
+      context: ./product-service
+        image: ${DOCKERHUB_USERNAME}/multi-team-dev-product:latest
+    networks:
+      - shared-net
+    env_file:
+      - .env.product
+    environment:
+      - MONGO_URI=mongodb://${PRODUCT_TEAM_NAME}:${PRODUCT_TEAM_PASS}@mongo:27017/product
+      - VECTOR_DB_URI=tcp://vector-db:19530
+      - PROMETHEUS_PREFIX=product_
+    depends_on:
+      - mongo
+      - vector-db

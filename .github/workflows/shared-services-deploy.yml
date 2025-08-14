@@ -21,12 +21,15 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           script: |
-            cd /home/overall/vsp/multi/multi-team-dev-deployment
-            
-            # Pull the latest images for shared services
-            docker compose -f shared-services.yml pull
-            
-            # Restart the shared services to use the new images
-            docker compose -f shared-services.yml up -d --no-build
-            
-            echo "Shared services deployment successful!"
+            mkdir -p /shared-dev
+            cd /shared-dev
+            if [ ! -d "multi-team-dev-deployment/.git" ]; then
+              rm -rf multi-team-dev-deployment
+              git clone https://github.com/IliaFarzi/multi-team-dev-deployment.git multi-team-dev-deployment
+            fi
+            cd multi-team-dev-deployment
+            echo "SHARED_NAME=${{ secrets.SHARED_NAME }}" > .shared.env
+            echo "SHARED_PASS=${{ secrets.SHARED_PASS }}" >> .shared.env
+            git pull origin main
+            docker compose -f shared-services.yml --env-file .shared.env pull
+            docker compose -f shared-services.yml --env-file .shared.env up -d --no-build

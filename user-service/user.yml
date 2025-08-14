@@ -1,0 +1,21 @@
+version: '3.9'
+networks:
+  shared-net:
+    external: true
+
+services:
+  user-app:
+    build:
+      context: ./user-service
+            image: ${DOCKERHUB_USERNAME}/multi-team-dev-user:latest
+    networks:
+      - shared-net
+    env_file:
+      - .env.user
+    environment:
+      - MONGO_URI=mongodb://${USER_TEAM_NAME}:${USER_TEAM_PASS}@mongo:27017/user
+      - VECTOR_DB_URI=tcp://vector-db:19530 
+      - PROMETHEUS_PREFIX=user_
+    depends_on:
+      - mongo
+      - vector-db
