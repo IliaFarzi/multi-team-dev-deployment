@@ -17,9 +17,9 @@ jobs:
 
       - name: Log env
         run: |
-          echo "Host: ${VPS_HOST}"
-          echo "Username: ${VPS_USERNAME}"
-          echo "Key starts with: $(echo "${VPS_PRIVATE_KEY}" | head -c 20)..."
+          echo "Host: ${{ secrets.VPS_HOST }}"
+          echo "Username: ${{ secrets.VPS_USERNAME }}"
+          echo "Key starts with: $(echo "${{ secrets.VPS_PRIVATE_KEY }}" | head -c 20)..."
 
 
       - name: Deploy to VPS
