@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'shared-services.yml'
-      - 'shared-services-deploy.yml'
+      - '.github/workflows/shared-services-deploy.yml'
 
 jobs:
   deploy:
