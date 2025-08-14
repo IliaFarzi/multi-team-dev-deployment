@@ -30,6 +30,7 @@ jobs:
           key: ${{ secrets.VPS_PRIVATE_KEY }}
           timeout: 300s
           command_timeout: 600s
+          port: 32222
           script: |
             mkdir -p /shared-dev
             cd /shared-dev
