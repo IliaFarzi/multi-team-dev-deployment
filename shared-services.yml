@@ -8,6 +8,7 @@ volumes:
   mongo-data:
   prometheus-data:
   grafana-data:
+  qdrant-data:
 
 services:
   mongo:
@@ -21,12 +22,15 @@ services:
       - "27017:27017"
 
   vector-db:
-    image: milvusdb/milvus:v2.6.0
+    image: qdrant/qdrant:v1.12.3
     container_name: vector-db
     networks:
       - shared-net
     ports:
-      - "19530:19530"
+      - "6333:6333"   # REST API
+      - "6334:6334"   # gRPC
+    volumes:
+      - qdrant-data:/qdrant/storage
 
   prometheus:
     image: prom/prometheus:v3.5.0

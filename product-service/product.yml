@@ -15,7 +15,7 @@ services:
       - .env.product
     environment:
       - MONGO_URI=mongodb://${PRODUCT_TEAM_NAME}:${PRODUCT_TEAM_PASS}@mongo:27017/product
-      - VECTOR_DB_URI=tcp://vector-db:19530
+      - VECTOR_DB_URI=http://vector-db:6333
       - PROMETHEUS_PREFIX=product_
     depends_on:
       - mongo

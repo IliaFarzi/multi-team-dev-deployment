@@ -14,7 +14,7 @@ services:
       - .env.user
     environment:
       - MONGO_URI=mongodb://${USER_TEAM_NAME}:${USER_TEAM_PASS}@mongo:27017/user
-      - VECTOR_DB_URI=tcp://vector-db:19530 
+      - VECTOR_DB_URI=http://vector-db:6333
       - PROMETHEUS_PREFIX=user_
     depends_on:
       - mongo
