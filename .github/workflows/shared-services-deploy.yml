@@ -17,8 +17,8 @@ jobs:
 
       - name: Log env
         run: |
-          echo "Host: ${{ secrets.VPS_HOST }}"
-          echo "Username: ${{ secrets.VPS_USERNAME }}"
+          echo "Host starts with: $(echo "${{ secrets.VPS_HOST }}" | head -c 3)..."
+          echo "Username starts with: $(echo "${{ secrets.VPS_USERNAME }}" | head -c 3)..."
           echo "Key starts with: $(echo "${{ secrets.VPS_PRIVATE_KEY }}" | head -c 20)..."
 
 
@@ -28,6 +28,8 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_PRIVATE_KEY }}
+          timeout: 300
+          command_timeout: 600
           script: |
             mkdir -p /shared-dev
             cd /shared-dev
