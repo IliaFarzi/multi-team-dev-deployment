@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'shared-services.yml'
+      - 'shared-services-deploy.yml'
 
 jobs:
   deploy:
@@ -14,8 +15,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Log env
+        run: |
+          echo "Host: ${VPS_HOST}"
+          echo "Username: ${VPS_USERNAME}"
+          echo "Key starts with: $(echo "${VPS_PRIVATE_KEY}" | head -c 20)..."
+
+
       - name: Deploy to VPS
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
