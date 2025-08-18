@@ -21,7 +21,6 @@ jobs:
           echo "Username starts with: $(echo "${{ secrets.VPS_USERNAME }}" | head -c 3)..."
           echo "Key starts with: $(echo "${{ secrets.VPS_PRIVATE_KEY }}" | head -c 20)..."
 
-
       - name: Deploy to VPS
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -39,9 +38,14 @@ jobs:
               git clone https://github.com/IliaFarzi/multi-team-dev-deployment.git multi-team-dev-deployment
             fi
             cd multi-team-dev-deployment
+
+            # write environment variables
             echo "SHARED_NAME=${{ secrets.SHARED_NAME }}" > .shared.env
             echo "SHARED_PASS=${{ secrets.SHARED_PASS }}" >> .shared.env
+
             git pull origin main
             docker compose -f shared-services.yml --env-file .shared.env pull
             docker compose -f shared-services.yml --env-file .shared.env up -d --no-build
 
+            # clean up old docker images/containers
+            docker system prune -a -f
