@@ -31,8 +31,8 @@ jobs:
           command_timeout: 600s
           port: 32222
           script: |
-            mkdir -p /shared-dev
-            cd /shared-dev
+            mkdir -p /home/shared
+            cd /home/shared
             if [ ! -d "multi-team-dev-deployment/.git" ]; then
               rm -rf multi-team-dev-deployment
               git clone https://github.com/IliaFarzi/multi-team-dev-deployment.git multi-team-dev-deployment
