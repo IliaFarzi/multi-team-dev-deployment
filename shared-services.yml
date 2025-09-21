@@ -26,6 +26,7 @@ services:
     command: ["mongod", "--auth"]   # enforce authentication
     ports:
       - "27017:27017"
+    restart: on-failure
 
   vector-db:
     image: qdrant/qdrant:v1.12.3
