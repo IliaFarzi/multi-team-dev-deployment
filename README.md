@@ -26,8 +26,6 @@ docker compose -f shared-services.yml up -d
 
 The repository is configured with two separate GitHub Actions workflows, one for each team. This allows teams to deploy their applications independently.
 
-- A push to the `main` branch with changes in the `teamA/` directory will trigger the **Build and Deploy Team A** workflow.
-- A push to the `main` branch with changes in the `teamB/` directory will trigger the **Build and Deploy Team B** workflow.
 
 Each workflow will:
 1.  **Build** the Docker image for the respective team.
